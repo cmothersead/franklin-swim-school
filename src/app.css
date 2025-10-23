@@ -1,3 +1,17 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton-svelte';
+@import './franklin-swim-school-theme';
+
+@source inline('bg-blue-500');
+@source inline('flex');
+@source inline('flex-col');
+@source inline('grid');
+@source inline('gap-2');
+@source inline('gap-4');
+@source inline('bg-surface-700');
+@source inline('preset-filled');
+@source inline('h2');
