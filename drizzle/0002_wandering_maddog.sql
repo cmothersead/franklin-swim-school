@@ -1,0 +1,1 @@
+ALTER TABLE `instructor` ADD `id` integer;
