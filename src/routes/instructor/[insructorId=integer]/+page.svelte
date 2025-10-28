@@ -51,23 +51,57 @@
 		}
 		const hovered = row == hoveredRow && column == hoveredColumn;
 		const active = grid[row][column] == true;
-		const settingActive = clickedRow && clickedColumn && grid[clickedRow][clickedColumn] == false;
+		const settingActive =
+			clickedRow != undefined &&
+			clickedColumn != undefined &&
+			grid[clickedRow][clickedColumn] == false;
 		const selected =
-			clickedRow && hoveredRow && column == hoveredColumn && between(row, clickedRow, hoveredRow);
+			clickedRow != undefined &&
+			clickedColumn != undefined &&
+			hoveredRow != undefined &&
+			hoveredColumn != undefined &&
+			between(row, clickedRow, hoveredRow) &&
+			between(column, clickedColumn, hoveredColumn);
+
+		const top =
+			(active && grid[row - 1] == undefined) ||
+			(active && grid[row - 1]?.[column] == false) ||
+			(selected &&
+				clickedRow != undefined &&
+				hoveredRow != undefined &&
+				row == Math.min(clickedRow, hoveredRow) &&
+				grid[row - 1]?.[column] == false) ||
+			(hovered && !active && !selected)
+				? ' rounded-t-lg'
+				: '';
+		const bottom =
+			(active && grid[row + 1] == undefined) ||
+			(active && grid[row + 1]?.[column] == false) ||
+			(selected &&
+				clickedRow != undefined &&
+				hoveredRow != undefined &&
+				row == Math.max(clickedRow, hoveredRow) &&
+				grid[row + 1]?.[column] == false) ||
+			(hovered && !active && !selected)
+				? ' rounded-b-lg'
+				: '';
+		if (selected && hovered) {
+			console.log({ selected, settingActive, active, hovered, clickedRow, clickedColumn });
+		}
 		if (selected && settingActive && !hovered) {
-			return 'bg-success-200-800';
+			return `bg-success-200-800${top}${bottom}`;
 		} else if (selected && active && !settingActive && hovered) {
-			return 'bg-error-700-300';
+			return `bg-error-700-300${top}${bottom}`;
 		} else if (selected && active && !settingActive && !hovered) {
-			return 'bg-error-800-200';
+			return `bg-error-800-200${top}${bottom}`;
 		} else if (!selected && active && hovered) {
-			return 'bg-warning-700-300';
+			return `bg-warning-700-300${top}${bottom}`;
 		} else if (hovered && selected && !settingActive) {
 			return '';
 		} else if (hovered) {
-			return 'bg-success-50-950';
+			return `bg-success-50-950${top}${bottom}`;
 		} else if (active) {
-			return 'bg-success-500';
+			return `bg-success-500${top}${bottom}`;
 		}
 	}
 
@@ -108,12 +142,16 @@
 			clickedColumn !== undefined &&
 			clickedRow !== undefined &&
 			hoveredColumn !== undefined &&
-			hoveredRow !== undefined &&
-			clickedColumn == hoveredColumn
+			hoveredRow !== undefined
 		) {
 			const value = !grid[clickedRow][clickedColumn];
 			for (let i = Math.min(clickedRow, hoveredRow); i <= Math.max(clickedRow, hoveredRow); i++) {
-				grid[i][clickedColumn] = value;
+				for (
+					let j = Math.min(clickedColumn, hoveredColumn);
+					j <= Math.max(clickedColumn, hoveredColumn);
+					j++
+				)
+					grid[i][j] = value;
 			}
 		}
 		clickedRow = clickedColumn = undefined;
