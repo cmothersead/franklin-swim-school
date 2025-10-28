@@ -21,7 +21,7 @@
 			</a>
 		{/each}
 	</div>
-	<div class="flex-grow p-8">
+	<div class="flex-grow overflow-y-auto p-8">
 		{@render children?.()}
 	</div>
 </div>

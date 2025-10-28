@@ -8,7 +8,10 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 export async function load({ params }) {
 	const instructorId = parseInt(params.insructorId);
 	const instructor = await db.query.instructors.findFirst({
-		where: eq(instructors.id, instructorId)
+		where: eq(instructors.id, instructorId),
+		with: {
+			availability: true
+		}
 	});
 	if (!instructor) error(404, 'This instructor does not exist!');
 
